@@ -3,58 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Management System</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>eLibrary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        #search-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #search-bar {
+            padding: 10px;
+            width: 50%;
+            font-size: 16px;
+        }
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
+        .book-item {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .book-item:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .book-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .book-item h3 {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        .book-item p {
+            color: gray;
+            font-size: 14px;
+        }
+        .book-details {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .book-details h2 {
+            margin-bottom: 10px;
+        }
+        .close-btn {
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div class="wrapper">
-        <!-- Replace PHP include("top.php") with dynamic JavaScript load -->
-        <div id="top"></div> <!-- Placeholder for top.php -->
+    <header>
+        <h1>Welcome to eLibrary</h1>
+        <p>Your digital book collection</p>
+    </header>
 
-        <!-- Main wrapper div starts here-->
-        <div class="main_wrapper">
-            <!-- Content wrapper div starts here-->
-            <div class="content_wrapper">
-                <h1>The Library</h1>
-                <div id="content"></div> <!-- Placeholder for index2.php -->
-            </div>
-            <!-- Content wrapper div ends here-->
-            
-            <!-- Right wrapper div starts here-->
-            <div id="side_bar">
-                <div id="subject"></div> <!-- Placeholder for index_subject.php -->
-            </div>
-            <!-- Right wrapper div ends here-->
-            
-            <div class="clr"></div>
-            <div><img src="images/edge_bottom.jpg" alt="Bottom Edge" border="0"></div>
-        </div>
-        <!-- Main wrapper div ends here-->
+    <div id="search-container">
+        <input type="text" id="search-bar" placeholder="Search books..." onkeyup="searchBooks()">
+    </div>
+
+    <div class="book-list" id="book-list">
+        <!-- Books will be displayed here dynamically -->
+    </div>
+
+    <div id="book-details" class="book-details">
+        <button class="close-btn" onclick="closeDetails()">Close</button>
+        <h2 id="book-title"></h2>
+        <p id="book-description"></p>
     </div>
 
     <script>
-        // Simulate PHP session using localStorage or sessionStorage
-        if (!sessionStorage.getItem('isLoggedIn')) {
-            sessionStorage.setItem('isLoggedIn', 'false');
+        // Sample data for books
+        const books = [
+            { id: 1, title: "JavaScript: The Good Parts", author: "Douglas Crockford", description: "A deep dive into JavaScript's core features.", img: "https://via.placeholder.com/150" },
+            { id: 2, title: "HTML & CSS: Design and Build Websites", author: "Jon Duckett", description: "A beginner-friendly guide to HTML and CSS.", img: "https://via.placeholder.com/150" },
+            { id: 3, title: "Learning Python", author: "Mark Lutz", description: "Comprehensive guide to Python programming.", img: "https://via.placeholder.com/150" },
+            { id: 4, title: "Eloquent JavaScript", author: "Marijn Haverbeke", description: "A modern introduction to programming using JavaScript.", img: "https://via.placeholder.com/150" },
+            { id: 5, title: "Clean Code", author: "Robert C. Martin", description: "A guide to writing clean, maintainable code.", img: "https://via.placeholder.com/150" },
+        ];
+
+        // Function to render the books
+        function displayBooks(books) {
+            const bookList = document.getElementById('book-list');
+            bookList.innerHTML = '';  // Clear previous list
+            books.forEach(book => {
+                const bookItem = document.createElement('div');
+                bookItem.classList.add('book-item');
+                bookItem.onclick = () => showDetails(book);
+                bookItem.innerHTML = `
+                    <img src="${book.img}" alt="${book.title}">
+                    <h3>${book.title}</h3>
+                    <p>${book.author}</p>
+                `;
+                bookList.appendChild(bookItem);
+            });
         }
 
-        // Load the "top.php" content dynamically (e.g., navigation bar, header)
-        fetch('top.html')
-            .then(response => response.text())
-            .then(data => document.getElementById('top').innerHTML = data)
-            .catch(error => console.error('Error loading top.html:', error));
+        // Function to show book details
+        function showDetails(book) {
+            document.getElementById('book-title').textContent = book.title;
+            document.getElementById('book-description').textContent = book.description;
+            document.getElementById('book-details').style.display = 'block';
+        }
 
-        // Load the "index2.php" content dynamically (main content)
-        fetch('index2.html')
-            .then(response => response.text())
-            .then(data => document.getElementById('content').innerHTML = data)
-            .catch(error => console.error('Error loading index2.html:', error));
+        // Function to close book details
+        function closeDetails() {
+            document.getElementById('book-details').style.display = 'none';
+        }
 
-        // Load the "index_subject.php" content dynamically (sidebar)
-        fetch('index_subject.html')
-            .then(response => response.text())
-            .then(data => document.getElementById('subject').innerHTML = data)
-            .catch(error => console.error('Error loading index_subject.html:', error));
+        // Function to filter books based on search input
+        function searchBooks() {
+            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+            const filteredBooks = books.filter(book => book.title.toLowerCase().includes(searchQuery));
+            displayBooks(filteredBooks);
+        }
+
+        // Initially display all books
+        displayBooks(books);
     </script>
 </body>
 </html>
