@@ -23,8 +23,11 @@
         }
         #search-bar {
             padding: 10px;
-            width: 50%;
+            width: 60%;
             font-size: 16px;
+            max-width: 500px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         .book-list {
             display: flex;
@@ -41,6 +44,7 @@
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
+            transition: box-shadow 0.3s;
         }
         .book-item:hover {
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -65,6 +69,9 @@
             margin: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .book-details h2 {
             margin-bottom: 10px;
@@ -76,6 +83,10 @@
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+        }
+        .close-btn:focus {
+            outline: none;
         }
     </style>
 </head>
@@ -86,7 +97,7 @@
     </header>
 
     <div id="search-container">
-        <input type="text" id="search-bar" placeholder="Search books..." onkeyup="searchBooks()">
+        <input type="text" id="search-bar" placeholder="Search books..." onkeyup="searchBooks()" aria-label="Search books">
     </div>
 
     <div class="book-list" id="book-list">
@@ -94,19 +105,25 @@
     </div>
 
     <div id="book-details" class="book-details">
-        <button class="close-btn" onclick="closeDetails()">Close</button>
+        <button class="close-btn" onclick="closeDetails()" aria-label="Close details">Close</button>
         <h2 id="book-title"></h2>
         <p id="book-description"></p>
     </div>
 
     <script>
-        // Sample data for books
+        // Sample data for books with 10 books
         const books = [
-            { id: 1, title: "JavaScript: The Good Parts", author: "Douglas Crockford", description: "A deep dive into JavaScript's core features.", img: "https://via.placeholder.com/150" },
-            { id: 2, title: "HTML & CSS: Design and Build Websites", author: "Jon Duckett", description: "A beginner-friendly guide to HTML and CSS.", img: "https://via.placeholder.com/150" },
-            { id: 3, title: "Learning Python", author: "Mark Lutz", description: "Comprehensive guide to Python programming.", img: "https://via.placeholder.com/150" },
-            { id: 4, title: "Eloquent JavaScript", author: "Marijn Haverbeke", description: "A modern introduction to programming using JavaScript.", img: "https://via.placeholder.com/150" },
-            { id: 5, title: "Clean Code", author: "Robert C. Martin", description: "A guide to writing clean, maintainable code.", img: "https://via.placeholder.com/150" },
+            { id: 1, title: "JavaScript: The Good Parts", author: "Douglas Crockford", description: "A deep dive into JavaScript's core features.", img: "https://via.placeholder.com/150?text=JS" },
+            { id: 2, title: "HTML & CSS: Design and Build Websites", author: "Jon Duckett", description: "A beginner-friendly guide to HTML and CSS.", img: "https://via.placeholder.com/150?text=HTML+CSS" },
+            { id: 3, title: "Learning Python", author: "Mark Lutz", description: "Comprehensive guide to Python programming.", img: "https://via.placeholder.com/150?text=Python" },
+            { id: 4, title: "Eloquent JavaScript", author: "Marijn Haverbeke", description: "A modern introduction to programming using JavaScript.", img: "https://via.placeholder.com/150?text=Eloquent+JS" },
+            { id: 5, title: "Clean Code", author: "Robert C. Martin", description: "A guide to writing clean, maintainable code.", img: "https://via.placeholder.com/150?text=Clean+Code" },
+            { id: 6, title: "Design Patterns", author: "Erich Gamma", description: "Creational, structural, and behavioral design patterns.", img: "https://via.placeholder.com/150?text=Design+Patterns" },
+            { id: 7, title: "The Pragmatic Programmer", author: "Andrew Hunt", description: "Tips and techniques for improving your coding skills.", img: "https://via.placeholder.com/150?text=Pragmatic+Programmer" },
+            { id: 8, title: "The Clean Coder", author: "Robert C. Martin", description: "A guide to professional software development practices.", img: "https://via.placeholder.com/150?text=Clean+Coder" },
+            { id: 9, title: "Refactoring", author: "Martin Fowler", description: "Improving the design of existing code.", img: "https://via.placeholder.com/150?text=Refactoring" },
+            { id: 10, title: "The Art of Computer Programming", author: "Donald E. Knuth", description: "The fundamental algorithms that form the backbone of computing.", img: "https://via.placeholder.com/150?text=Computer+Programming" },
+            // Add more books as necessary...
         ];
 
         // Function to render the books
@@ -117,11 +134,24 @@
                 const bookItem = document.createElement('div');
                 bookItem.classList.add('book-item');
                 bookItem.onclick = () => showDetails(book);
-                bookItem.innerHTML = `
-                    <img src="${book.img}" alt="${book.title}">
-                    <h3>${book.title}</h3>
-                    <p>${book.author}</p>
-                `;
+
+                // Create elements for the book item
+                const img = document.createElement('img');
+                img.src = book.img;
+                img.alt = book.title;
+
+                const title = document.createElement('h3');
+                title.textContent = book.title;
+
+                const author = document.createElement('p');
+                author.textContent = book.author;
+
+                // Append elements to book item
+                bookItem.appendChild(img);
+                bookItem.appendChild(title);
+                bookItem.appendChild(author);
+
+                // Append book item to book list
                 bookList.appendChild(bookItem);
             });
         }
