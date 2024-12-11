@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Replace PHP include("top.php") with dynamic JavaScript load -->
+        <div id="top"></div> <!-- Placeholder for top.php -->
+
+        <!-- Main wrapper div starts here-->
+        <div class="main_wrapper">
+            <!-- Content wrapper div starts here-->
+            <div class="content_wrapper">
+                <h1>The Library</h1>
+                <div id="content"></div> <!-- Placeholder for index2.php -->
+            </div>
+            <!-- Content wrapper div ends here-->
+            
+            <!-- Right wrapper div starts here-->
+            <div id="side_bar">
+                <div id="subject"></div> <!-- Placeholder for index_subject.php -->
+            </div>
+            <!-- Right wrapper div ends here-->
+            
+            <div class="clr"></div>
+            <div><img src="images/edge_bottom.jpg" alt="Bottom Edge" border="0"></div>
+        </div>
+        <!-- Main wrapper div ends here-->
+    </div>
+
+    <script>
+        // Simulate PHP session using localStorage or sessionStorage
+        if (!sessionStorage.getItem('isLoggedIn')) {
+            sessionStorage.setItem('isLoggedIn', 'false');
+        }
+
+        // Load the "top.php" content dynamically (e.g., navigation bar, header)
+        fetch('top.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('top').innerHTML = data)
+            .catch(error => console.error('Error loading top.html:', error));
+
+        // Load the "index2.php" content dynamically (main content)
+        fetch('index2.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('content').innerHTML = data)
+            .catch(error => console.error('Error loading index2.html:', error));
+
+        // Load the "index_subject.php" content dynamically (sidebar)
+        fetch('index_subject.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('subject').innerHTML = data)
+            .catch(error => console.error('Error loading index_subject.html:', error));
+    </script>
+</body>
+</html>
